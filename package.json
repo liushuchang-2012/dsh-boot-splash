@@ -1,0 +1,71 @@
+{
+  "name": "dsh-boot-splash",
+  "version": "0.1.0",
+  "description": "Startup splash for DeepSeek Harness: the blue whale floods black, then condenses into the | deepseek HARNESS wordmark.",
+  "type": "module",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "author": "liushuchang-2012",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liushuchang-2012/dsh-boot-splash.git"
+  },
+  "homepage": "https://github.com/liushuchang-2012/dsh-boot-splash#readme",
+  "bugs": {
+    "url": "https://github.com/liushuchang-2012/dsh-boot-splash/issues"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "dsh-client-plugin",
+    "splash",
+    "boot-animation",
+    "startup",
+    "animation",
+    "whale"
+  ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node build.mjs && node --check client.js"
+  },
+  "files": [
+    "lib",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "src",
+    "dev/logo-data.js",
+    "dev/boot.html",
+    "dev/shot.mjs",
+    "dev/frames.py",
+    "dev/build-logo-data.mjs",
+    "dev/serve.mjs",
+    "dev/integration.html",
+    "dev/make-gif.mjs",
+    "dev/gif.py",
+    "preview",
+    "build.mjs",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ]
+}

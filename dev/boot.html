@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dsh-boot-splash — preview</title>
+<style>html, body { margin: 0; height: 100%; background: #fff; overflow: hidden; }</style>
+</head>
+<body>
+<div id="host"></div>
+<script src="./logo-data.js"></script>
+<script src="../src/splash.js"></script>
+<script>
+  const q = new URLSearchParams(location.search);
+  window.__dshHandle = window.__DSH_SPLASH__.mountSplash(
+    document.getElementById("host"),
+    window.__DSH_BOOT_LOGO__,
+    { freeze: q.has("t") ? Number(q.get("t")) : null, debug: q.has("debug") }
+  );
+</script>
+</body>
+</html>

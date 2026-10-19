@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dsh-boot-splash — client.js integration harness</title>
+<style>html, body { margin: 0; height: 100%; background: #dfe4ea; overflow: hidden; }</style>
+</head>
+<body>
+<!-- Minimal stand-ins for the two runtime globals the shell provides:
+     window.__ModuleLoader__ (loads the bundle) and require('react') (hooks +
+     createElement). This exercises the SHIPPED client.js end to end —
+     registration on shell.overlay, mount, timeline, teardown. -->
+<div id="app"></div>
+<pre id="log" style="position:fixed;left:8px;bottom:6px;margin:0;font:11px ui-monospace,monospace;color:#55606e"></pre>
+<script>
+window.__err = [];
+window.addEventListener("error", function (e) { window.__err.push(String(e.message)); });
+(function () {
+  /* --- tiny hook-based React --- */
+  var hooks = [], cursor = 0, rerender = null;
+  var React = {
+    createElement: function (type, props) {
+      var kids = [].slice.call(arguments, 2);
+      return { type: type, props: props || {}, kids: kids.length ? kids : ([].slice.call(arguments, 2)) };
+    },
+    useRef: function (init) {
+      var i = cursor++;
+      if (!(i in hooks)) hooks[i] = { current: init };
+      return hooks[i];
+    },
+    useState: function (init) {
+      var i = cursor++;
+      if (!(i in hooks)) hooks[i] = { v: init };
+      var slot = hooks[i];
+      return [slot.v, function (next) { slot.v = next; if (rerender) rerender(); }];
+    },
+    useEffect: function (fn) {
+      var i = cursor++;
+      if (!(i in hooks)) hooks[i] = { ran: false, fn: fn, cleanup: null };
+      hooks[i].fn = fn;
+      return hooks[i];
+    },
+  };
+
+  var pendingEffects = [];
+  var unmounts = [];
+  function toDom(node) {
+    if (node == null || node === false) return null;
+    if (typeof node === "string") return document.createTextNode(node);
+    if (Array.isArray(node)) {
+      var frag = document.createDocumentFragment();
+      node.forEach(function (n) { var d = toDom(n); if (d) frag.appendChild(d); });
+      return frag;
+    }
+    if (node.type === React.Fragment) return toDom(node.kids);
+    var el = document.createElement(node.type);
+    var p = node.props || {};
+    Object.keys(p).forEach(function (k) {
+      if (k === "ref") { if (p[k]) p[k].current = el; return; }
+      if (k === "className") { el.className = p[k]; return; }
+      if (k === "children") return;
+      if (k.slice(0, 2) === "on") { el.addEventListener(k.slice(2).toLowerCase(), p[k]); return; }
+      el.setAttribute(k, p[k]);
+    });
+    (node.kids || []).forEach(function (k) { var d = toDom(k); if (d) el.appendChild(d); });
+    return el;
+  }
+
+  function renderComponent(Comp, mount) {
+    cursor = 0;
+    var collected = [];
+    var real = React.useEffect;
+    React.useEffect = function (fn) { var h = real(fn); collected.push(h); return h; };
+    var out;
+    try { out = Comp(); } finally { React.useEffect = real; }
+    mount.innerHTML = "";
+    var dom = toDom(out);
+    if (dom) mount.appendChild(dom);
+    collected.forEach(function (h) { if (!h.ran) { h.ran = true; h.cleanup = h.fn() || null; } });
+  }
+
+  /* --- fake module loader --- */
+  window.__ModuleLoader__ = {
+    load: function (def) {
+      var mod = def.factory(function (name) {
+        if (name === "react") return React;
+        throw new Error("unexpected require: " + name);
+      });
+      var registered = [];
+      var injectedStyle = [];
+      var ctx = {
+        slots: {
+          inject: function (slotName, factory) {
+            var reg = factory();
+            registered.push({ slot: slotName, reg: reg, factory: factory });
+          },
+          register: function (opts, Comp) { return { opts: opts, Comp: Comp }; },
+        },
+        effect: function (fn) { var cleanup = fn(); injectedStyle.push(cleanup); return cleanup; },
+        on: function () { return function () {}; },
+      };
+      mod.apply(ctx);
+      document.getElementById("log").textContent =
+        "loader ok · inject=" + JSON.stringify(mod.inject) + " · slots=" + registered.map(function (r) { return r.slot; }).join(",");
+
+      var entry = registered[0];
+      var mount = document.getElementById("app");
+      window.__mountOverlay = function () {
+        rerender = function () { renderComponent(entry.reg.Comp, mount); };
+        renderComponent(entry.reg.Comp, mount);
+      };
+      window.__mountOverlay();
+    },
+  };
+})();
+</script>
+<script src="../client.js"></script>
+</body>
+</html>
