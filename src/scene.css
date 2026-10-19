@@ -1,0 +1,159 @@
+/* dsh-boot-splash — scene stylesheet.
+   Only four hues are allowed: white, black, grey and blue. */
+:root {
+  --hero: clamp(250px, 42vmin, 420px);
+  --ink: #0f1115;
+  --blue: #2f6bff;
+  --blue-soft: #8db8ff;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  transform-origin: 50% 50%;
+  will-change: opacity, transform;
+}
+
+/* soft light the whale condenses out of */
+#bloom {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1100px;
+  height: 1100px;
+  margin: -550px 0 0 -550px;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(47, 107, 255, .34) 0%,
+    rgba(47, 107, 255, .17) 26%,
+    rgba(120, 160, 255, .07) 46%,
+    rgba(255, 255, 255, 0) 68%);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* corner falloff keeps the eye on the mark */
+#vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 78% 70% at 50% 50%,
+    rgba(15, 17, 21, 0) 55%,
+    rgba(15, 17, 21, .05) 100%);
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* film grain, barely there, keeps flat white from looking like a blank page */
+#grain {
+  position: absolute;
+  inset: 0;
+  opacity: .028;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* the contact shadow the mark sits on */
+#shadow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220px;
+  height: 26px;
+  margin: -13px 0 0 -110px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(15, 17, 21, .16) 0%,
+    rgba(15, 17, 21, .07) 45%,
+    rgba(15, 17, 21, 0) 72%);
+  filter: blur(5px);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+#hero,
+#trailA,
+#trailB {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--hero);
+  height: var(--hero);
+  margin: calc(var(--hero) / -2) 0 0 calc(var(--hero) / -2);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#hero {
+  will-change: transform, opacity, filter;
+}
+
+#hero svg,
+#trailA svg,
+#trailB svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+#particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* one hairline that rides the ink, so the tide reads as liquid */
+#wake {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1px;
+  width: 0;
+  background: linear-gradient(90deg,
+    rgba(15, 17, 21, 0) 0%,
+    rgba(15, 17, 21, .30) 40%,
+    rgba(15, 17, 21, 0) 100%);
+  opacity: 0;
+  will-change: transform, opacity, width;
+}
+
+#lockup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  overflow: visible;
+  width: clamp(320px, 40vw, 560px);
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* the signature rule that draws itself under the finished lockup */
+#rule {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 1px;
+  width: 0;
+  margin-top: 34px;
+  background: linear-gradient(90deg,
+    rgba(15, 17, 21, 0) 0%,
+    rgba(15, 17, 21, .18) 22%,
+    rgba(15, 17, 21, .18) 78%,
+    rgba(15, 17, 21, 0) 100%);
+  transform: translateX(-50%);
+  opacity: 0;
+  will-change: width, opacity;
+}
+
+#dbg {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  font: 11px/1 ui-monospace, monospace;
+  color: #9aa3b2;
+}

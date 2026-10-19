@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const dev = dirname(fileURLToPath(import.meta.url));
 const FPS = 10;
-const TOTAL = 7700;
+const TOTAL = 7580;
 const times = [];
 for (let t = 0; t <= TOTAL; t += Math.round(1000 / FPS)) times.push(t);
 

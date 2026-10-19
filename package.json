@@ -1,7 +1,7 @@
 {
   "name": "dsh-boot-splash",
-  "version": "0.1.0",
-  "description": "Startup splash for DeepSeek Harness: the blue whale floods black, then condenses into the | deepseek HARNESS wordmark.",
+  "version": "0.2.0",
+  "description": "Startup film for DeepSeek Harness: the blue whale floods black as the app loads, then glides left and pulls out the | deepseek HARNESS wordmark.",
   "type": "module",
   "main": "lib/index.js",
   "license": "MIT",
@@ -52,7 +52,6 @@
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
-    "src",
     "dev/logo-data.js",
     "dev/boot.html",
     "dev/shot.mjs",
@@ -66,6 +65,10 @@
     "build.mjs",
     "README.md",
     "README.zh.md",
-    "LICENSE"
+    "LICENSE",
+    "src/scene.css",
+    "src/scene.html",
+    "src/timeline.js",
+    "screenshots.json"
   ]
 }

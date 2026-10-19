@@ -1,0 +1,70 @@
+<!-- dsh-boot-splash — scene markup. mountSplash() fills the SVG paths from logo data. -->
+<div id="bloom"></div>
+<div id="vignette"></div>
+
+<svg id="grain" aria-hidden="true">
+  <filter id="grainFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="1.35" numOctaves="2" stitchTiles="stitch" />
+    <feColorMatrix type="saturate" values="0" />
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grainFilter)" />
+</svg>
+
+<div id="shadow"></div>
+
+<svg id="trailA" aria-hidden="true" viewBox="0 0 50 50"><path id="trailAPath" fill="#0f1115" /></svg>
+<svg id="trailB" aria-hidden="true" viewBox="0 0 50 50"><path id="trailBPath" fill="#0f1115" /></svg>
+
+<!-- the hero: app-icon whale, painted blue, then flooded black from below -->
+<div id="hero">
+  <svg viewBox="0 0 50 50" aria-hidden="true">
+    <defs>
+      <linearGradient id="blueGrad" x1="0" y1="0" x2="0.55" y2="1">
+        <stop offset="0" stop-color="#9cc2ff" />
+        <stop offset=".42" stop-color="#3d7bff" />
+        <stop offset="1" stop-color="#1f4fe0" />
+      </linearGradient>
+      <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#fff" stop-opacity="0" />
+        <stop offset=".5" stop-color="#fff" stop-opacity=".9" />
+        <stop offset="1" stop-color="#fff" stop-opacity="0" />
+      </linearGradient>
+      <clipPath id="inkClip"><path id="inkPath" d="M -12 64 L 62 64 L 62 64 Z" /></clipPath>
+      <clipPath id="bodyClip"><use href="#whalePath" /></clipPath>
+      <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="2.1" />
+      </filter>
+      <path id="whalePath" />
+    </defs>
+    <use href="#whalePath" fill="url(#blueGrad)" id="wBlue" />
+    <g clip-path="url(#inkClip)">
+      <use href="#whalePath" fill="#0f1115" />
+    </g>
+    <g clip-path="url(#bodyClip)">
+      <path id="inkGlow" fill="none" stroke="#2f6bff" stroke-width="3.2" filter="url(#soft)" opacity="0" />
+      <path id="meniscus" fill="none" stroke="#fff" stroke-width=".9" opacity="0" />
+    </g>
+    <g clip-path="url(#bodyClip)" id="shineGroup" opacity="0">
+      <rect id="shineRect" x="-30" y="0" width="16" height="60" fill="url(#shineGrad)" transform="rotate(16 25 25)" />
+    </g>
+  </svg>
+</div>
+
+<svg id="particles" aria-hidden="true"></svg>
+
+<div id="wake"></div>
+
+<!-- the finished lockup: the real brand artwork, no font involved -->
+<svg id="lockup" aria-hidden="true" viewBox="145.467 11.5215 181.207 17.0435">
+  <g id="lockWhaleG" opacity="0" style="transform: scale(.86)">
+    <path id="lockWhalePath" fill="#0f1115" />
+  </g>
+  <g id="deepseekG" fill="#0f1115"></g>
+  <g id="pillG">
+    <rect id="pillRect" x="274.674" y="13.5" width="52" height="14" rx="2" fill="#0f1115" />
+  </g>
+  <g id="harnessG" fill="#fff"></g>
+</svg>
+
+<div id="rule"></div>
+<div id="dbg"></div>
